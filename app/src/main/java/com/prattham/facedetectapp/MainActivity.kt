@@ -177,28 +177,38 @@ class MainActivity : AppCompatActivity(), FrameProcessor {
             if (face.getLandmark(FirebaseVisionFaceLandmark.LEFT_EYE) != null) {
                 val leftEye = face.getLandmark(FirebaseVisionFaceLandmark.LEFT_EYE)
                 //leftEye is created, now we draw a circle to point at it
-                canvas.drawCircle(leftEye!!.position.x, leftEye.position.y, 8f, landmarkPaint)
+                if (leftEye != null) {
+                    canvas.drawCircle(leftEye.position.x, leftEye.position.y, 8f, landmarkPaint)
+                }
             }
 
             if (face.getLandmark(FirebaseVisionFaceLandmark.RIGHT_EYE) != null) {
                 val rightEye = face.getLandmark(FirebaseVisionFaceLandmark.RIGHT_EYE)
                 //rightEye is created, now we draw a circle to point at it
-                canvas.drawCircle(rightEye!!.position.x, rightEye.position.y, 8f, landmarkPaint)
+                if (rightEye != null) {
+                    canvas.drawCircle(rightEye.position.x, rightEye.position.y, 8f, landmarkPaint)
+                }
             }
             if (face.getLandmark(FirebaseVisionFaceLandmark.NOSE_BASE) != null) {
                 val noseBase = face.getLandmark(FirebaseVisionFaceLandmark.NOSE_BASE)
                 //noseBase is created, now we draw a circle to point at it
-                canvas.drawCircle(noseBase!!.position.x, noseBase.position.y, 8f, landmarkPaint)
+                if (noseBase != null) {
+                    canvas.drawCircle(noseBase.position.x, noseBase.position.y, 8f, landmarkPaint)
+                }
             }
             if (face.getLandmark(FirebaseVisionFaceLandmark.LEFT_EAR) != null) {
                 val leftEar = face.getLandmark(FirebaseVisionFaceLandmark.LEFT_EAR)
                 //leftEar is created, now we draw a circle to point at it
-                canvas.drawCircle(leftEar!!.position.x, leftEar.position.y, 8f, landmarkPaint)
+                if (leftEar != null) {
+                    canvas.drawCircle(leftEar.position.x, leftEar.position.y, 8f, landmarkPaint)
+                }
             }
             if (face.getLandmark(FirebaseVisionFaceLandmark.RIGHT_EAR) != null) {
                 val rightEar = face.getLandmark(FirebaseVisionFaceLandmark.RIGHT_EAR)
                 //rightEar is created, now we draw a circle to point at it
-                canvas.drawCircle(rightEar!!.position.x, rightEar.position.y, 8f, landmarkPaint)
+                if (rightEar != null) {
+                    canvas.drawCircle(rightEar.position.x, rightEar.position.y, 8f, landmarkPaint)
+                }
             }
             if (face.getLandmark(FirebaseVisionFaceLandmark.MOUTH_LEFT) != null
                 && face.getLandmark(FirebaseVisionFaceLandmark.MOUTH_BOTTOM) != null
@@ -207,20 +217,28 @@ class MainActivity : AppCompatActivity(), FrameProcessor {
                 val leftMouth = face.getLandmark(FirebaseVisionFaceLandmark.MOUTH_LEFT)
                 val bottomMouth = face.getLandmark(FirebaseVisionFaceLandmark.MOUTH_BOTTOM)
                 val rightMouth = face.getLandmark(FirebaseVisionFaceLandmark.MOUTH_RIGHT)
-                canvas.drawLine(
-                    leftMouth!!.position.x,
-                    leftMouth.position.y,
-                    bottomMouth!!.position.x,
-                    bottomMouth.position.y,
-                    landmarkPaint
-                )
-                canvas.drawLine(
-                    bottomMouth.position.x,
-                    bottomMouth.position.y,
-                    rightMouth!!.position.x,
-                    rightMouth.position.y,
-                    landmarkPaint
-                )
+                if (leftMouth != null) {
+                    if (bottomMouth != null) {
+                        canvas.drawLine(
+                            leftMouth.position.x,
+                            leftMouth.position.y,
+                            bottomMouth.position.x,
+                            bottomMouth.position.y,
+                            landmarkPaint
+                        )
+                    }
+                }
+                if (bottomMouth != null) {
+                    if (rightMouth != null) {
+                        canvas.drawLine(
+                            bottomMouth.position.x,
+                            bottomMouth.position.y,
+                            rightMouth.position.x,
+                            rightMouth.position.y,
+                            landmarkPaint
+                        )
+                    }
+                }
             }
 
             faceDetectionModels.add(
