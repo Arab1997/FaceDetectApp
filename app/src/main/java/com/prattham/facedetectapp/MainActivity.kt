@@ -103,10 +103,6 @@ class MainActivity : AppCompatActivity(), FrameProcessor {
     }
 
     private fun analyseImage(bitmap: Any) {
-        if (bitmap == null) {
-            toast("There was an error")
-            return
-        }
         face_detection_image_view.setImageBitmap(null)
         faceDetectionModels.clear()
         bottom_sheet_recycler_view.adapter?.notifyDataSetChanged()
@@ -146,7 +142,7 @@ class MainActivity : AppCompatActivity(), FrameProcessor {
     }
 
     private fun detectFaces(it: List<FirebaseVisionFace>, mutableImage: Bitmap?) {
-        if (it == null || mutableImage == null) {
+        if (mutableImage == null) {
             toast("There was an error")
             return
         }
