@@ -125,12 +125,22 @@ class MainActivity : AppCompatActivity(), FrameProcessor {
         val faceDetector = FirebaseVision.getInstance()
             .getVisionFaceDetector(options)
         faceDetector.detectInImage(firebaseVisionImage)
+
             .addOnSuccessListener {
                 val mutableImage = bitmap.copy(Bitmap.Config.ARGB_8888, true)
 
                 detectFaces(it, mutableImage)
+
+                face_detection_image_view.setImageBitmap(mutableImage)
+
+                hideProgress()
+                bottom_sheet_recycler_view.adapter!!.notifyDataSetChanged()
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+
             }
             .addOnFailureListener {
+                toast("There was an error")
+                hideProgress()
 
             }
     }
@@ -309,20 +319,24 @@ class MainActivity : AppCompatActivity(), FrameProcessor {
                             )
 
                         } else {
-                            canvas.drawLine(
-                                faceContour!!.x,
+                            if (faceContour != null) {
+                                canvas.drawLine(
+                                    faceContour.x,
+                                    faceContour.y,
+                                    faceContours[0].x,
+                                    faceContours[0].y,
+                                    linePaint
+                                )
+                            }
+                        }
+                        if (faceContour != null) {
+                            canvas.drawCircle(
+                                faceContour.x,
                                 faceContour.y,
-                                faceContours[0].x,
-                                faceContours[0].y,
-                                linePaint
+                                4f,
+                                dotPaint
                             )
                         }
-                        canvas.drawCircle(
-                            faceContour!!.x,
-                            faceContour.y,
-                            4f,
-                            dotPaint
-                        )
                     }
                     val leftEyebrowTopCountours = face.getContour(
                         FirebaseVisionFaceContour.LEFT_EYEBROW_TOP
