@@ -33,7 +33,7 @@ import org.jetbrains.anko.toast
 class MainActivity : AppCompatActivity(), FrameProcessor {
 
 
-    private val cameraFacing = Facing.FRONT
+    private var cameraFacing = Facing.FRONT
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
     private lateinit var faceDetectionModels: ArrayList<FaceDetectionModel>
 
@@ -50,6 +50,15 @@ class MainActivity : AppCompatActivity(), FrameProcessor {
         face_detection_camera_view.facing = cameraFacing
         face_detection_camera_view.setLifecycleOwner(this)
         face_detection_camera_view.addFrameProcessor(this)
+
+        //Rotate button
+        face_detection_camera_toggle_button.setOnClickListener {
+            cameraFacing = if ((cameraFacing === Facing.FRONT)) Facing.BACK
+            else
+                Facing.FRONT
+            face_detection_camera_view.facing = cameraFacing
+
+        }
 
         //bottomSheet behaviour
         bottom_sheet_button.setOnClickListener {
@@ -260,9 +269,11 @@ class MainActivity : AppCompatActivity(), FrameProcessor {
             .build()
 
         val firebaseVisionImage = FirebaseVisionImage.fromByteArray(frame.data, metadata)
+
         val options = FirebaseVisionFaceDetectorOptions.Builder()
             .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS)
             .build()
+
         val faceDetector = FirebaseVision.getInstance().getVisionFaceDetector(options)
         faceDetector.detectInImage(firebaseVisionImage)
             .addOnSuccessListener {
@@ -494,10 +505,25 @@ class MainActivity : AppCompatActivity(), FrameProcessor {
                         }
                         canvas.drawCircle(contour.x, contour.y, 4f, dotPaint)
                     }
+                    if (cameraFacing === Facing.FRONT) {
+                        //Flip image!
+                        val matrix = Matrix()
+                        matrix.preScale(-1f, 1f)
+                        val flippedBitmap = Bitmap.createBitmap(
+                            bitmap, 0, 0,
+                            bitmap.width, bitmap.height,
+                            matrix, true
+                        )
+                        face_detection_image_view.setImageBitmap(flippedBitmap)
+                    } else
+                        face_detection_image_view.setImageBitmap(bitmap)
 
                 }//end forloop
 
 
+            }
+            .addOnFailureListener {
+                face_detection_image_view.setImageBitmap(null)
             }
 
     }
